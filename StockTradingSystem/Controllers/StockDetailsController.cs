@@ -51,9 +51,6 @@ namespace StockTradingSystem.Controllers
             stockDetails.StockFilesViewModel = manager.GetStockFile(stockFileId);
             
             byte[] byteArray = Encoding.UTF8.GetBytes(stockDetails.StockFilesViewModel.File);
-            MemoryStream stream = new MemoryStream(byteArray);
-            StreamReader reader = new StreamReader(stream);
-                        
             FileTypeFactory fileFactory = new FileTypeFactory();
             FileType fileTypeClass = fileFactory.FileTypes(stockDetails.StockFilesViewModel.Format.ToLower());
             string fileType = fileTypeClass.GetFileType();

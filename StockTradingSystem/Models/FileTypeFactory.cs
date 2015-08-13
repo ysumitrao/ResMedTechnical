@@ -12,7 +12,7 @@ namespace StockTradingSystem
         public FileTypeFactory()
         {
             fileTypes.Add("xml", new XmlFileType());
-            fileTypes.Add("text", new TextFileType());
+            fileTypes.Add("txt", new TextFileType());
             fileTypes.Add("csv", new CsvFileType());
         }
 
@@ -39,7 +39,7 @@ namespace StockTradingSystem
     {
         public override string GetFileType()
         {
-            return "text/xml";
+            return "text/plain";
         }
     }
 
