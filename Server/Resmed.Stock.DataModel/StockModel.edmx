@@ -1,0 +1,211 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="StockModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityType Name="Site">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Format" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Url" Type="varchar" MaxLength="200" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StockFile">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SiteId" Type="int" Nullable="false" />
+          <Property Name="StockId" Type="int" Nullable="false" />
+          <Property Name="FileName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="File" Type="ntext" />
+          <Property Name="DownloadedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="StockSymbol">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Symbol" Type="varchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_StockFile_StockFile">
+          <End Role="Site" Type="Self.Site" Multiplicity="1" />
+          <End Role="StockFile" Type="Self.StockFile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Site">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="StockFile">
+              <PropertyRef Name="SiteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StockFile_StockSymbol">
+          <End Role="StockSymbol" Type="Self.StockSymbol" Multiplicity="1" />
+          <End Role="StockFile" Type="Self.StockFile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StockSymbol">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="StockFile">
+              <PropertyRef Name="StockId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="StockModelStoreContainer">
+          <EntitySet Name="Site" EntityType="Self.Site" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StockFile" EntityType="Self.StockFile" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StockSymbol" EntityType="Self.StockSymbol" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_StockFile_StockFile" Association="Self.FK_StockFile_StockFile">
+            <End Role="Site" EntitySet="Site" />
+            <End Role="StockFile" EntitySet="StockFile" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StockFile_StockSymbol" Association="Self.FK_StockFile_StockSymbol">
+            <End Role="StockSymbol" EntitySet="StockSymbol" />
+            <End Role="StockFile" EntitySet="StockFile" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="StockModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="StockEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Sites" EntityType="StockModel.Site" />
+          <EntitySet Name="StockFiles" EntityType="StockModel.StockFile" />
+          <EntitySet Name="StockSymbols" EntityType="StockModel.StockSymbol" />
+          <AssociationSet Name="FK_StockFile_StockFile" Association="StockModel.FK_StockFile_StockFile">
+            <End Role="Site" EntitySet="Sites" />
+            <End Role="StockFile" EntitySet="StockFiles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StockFile_StockSymbol" Association="StockModel.FK_StockFile_StockSymbol">
+            <End Role="StockSymbol" EntitySet="StockSymbols" />
+            <End Role="StockFile" EntitySet="StockFiles" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Site">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Format" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Url" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="StockFiles" Relationship="StockModel.FK_StockFile_StockFile" FromRole="Site" ToRole="StockFile" />
+        </EntityType>
+        <EntityType Name="StockFile">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SiteId" Type="Int32" Nullable="false" />
+          <Property Name="StockId" Type="Int32" Nullable="false" />
+          <Property Name="FileName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="File" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DownloadedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Site" Relationship="StockModel.FK_StockFile_StockFile" FromRole="StockFile" ToRole="Site" />
+          <NavigationProperty Name="StockSymbol" Relationship="StockModel.FK_StockFile_StockSymbol" FromRole="StockFile" ToRole="StockSymbol" />
+        </EntityType>
+        <EntityType Name="StockSymbol">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Symbol" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="StockFiles" Relationship="StockModel.FK_StockFile_StockSymbol" FromRole="StockSymbol" ToRole="StockFile" />
+        </EntityType>
+        <Association Name="FK_StockFile_StockFile">
+          <End Type="StockModel.Site" Role="Site" Multiplicity="1" />
+          <End Type="StockModel.StockFile" Role="StockFile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Site">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="StockFile">
+              <PropertyRef Name="SiteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StockFile_StockSymbol">
+          <End Type="StockModel.StockSymbol" Role="StockSymbol" Multiplicity="1" />
+          <End Type="StockModel.StockFile" Role="StockFile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StockSymbol">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="StockFile">
+              <PropertyRef Name="StockId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="StockModelStoreContainer" CdmEntityContainer="StockEntities">
+          <EntitySetMapping Name="Sites">
+            <EntityTypeMapping TypeName="StockModel.Site">
+              <MappingFragment StoreEntitySet="Site">
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Format" ColumnName="Format" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StockFiles">
+            <EntityTypeMapping TypeName="StockModel.StockFile">
+              <MappingFragment StoreEntitySet="StockFile">
+                <ScalarProperty Name="DownloadedDate" ColumnName="DownloadedDate" />
+                <ScalarProperty Name="File" ColumnName="File" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="StockId" ColumnName="StockId" />
+                <ScalarProperty Name="SiteId" ColumnName="SiteId" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StockSymbols">
+            <EntityTypeMapping TypeName="StockModel.StockSymbol">
+              <MappingFragment StoreEntitySet="StockSymbol">
+                <ScalarProperty Name="Symbol" ColumnName="Symbol" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="StockModel">
+        <EntityTypeShape EntityType="StockModel.Site" Width="1.5" PointX="0.75" PointY="1.25" />
+        <EntityTypeShape EntityType="StockModel.StockFile" Width="1.5" PointX="3.125" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="StockModel.StockSymbol" Width="1.5" PointX="5.625" PointY="1.375" />
+        <AssociationConnector Association="StockModel.FK_StockFile_StockFile" />
+        <AssociationConnector Association="StockModel.FK_StockFile_StockSymbol" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

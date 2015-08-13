@@ -1,0 +1,31 @@
+﻿@model StockTradingSystem.Models.StockDetails
+
+@{
+    ViewBag.Title = "Stock Details";
+}
+
+<h2>Stock Details</h2>
+<hr/>
+<div class="table">
+    <div class="row">
+        <div class="col-lg-2">
+            <b>Site: </b>@Html.DropDownList("ddlSite", new SelectList(Model.Sites, "ID", "Name"), "---Select ---", new { @onchange = "rebindGrid(this.value, ddlSymbol.value);" })
+        </div>
+        <div class="col-lg-2">
+            <b>Symbol: </b>@Html.DropDownList("ddlSymbol", new SelectList(Model.Symbols, "ID", "Symbol"), "---Select ---", new { @onchange = "rebindGrid(ddlSite.value, this.value);" })
+        </div>
+        <div class="col-lg-2">
+            <input type="button" id="btnResetSelection" value="Reset Selection" onclick="resetSelection();" />
+        </div>
+        <div class="col-lg-2">
+            <input type="button" id="btnGetStockFiles" value="Get All Files" onclick="getStockFiles();" />
+        </div>
+        <div class="col-lg-2">
+            <input type="button" id="btnRemoveAllFiles" value="Delete All Files" onclick="RemoveAllStockFiles();" />
+        </div>
+    </div>
+</div>
+<hr />
+<table class="table" id="stockFilesGrid"></table>
+<div id="pager">
+</div>
